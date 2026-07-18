@@ -7,7 +7,7 @@ milestone: "Orchestra MVP — Wave 7 (Round Orchestration)"
 coder: mimo (Cursor)
 tech_lead: zcode (ZCode)
 date: 2026-07-19
-status: DRAFT
+status: PASS
 verifier: build-gate (pnpm -r typecheck + pnpm -r build, 10 пакетов green) + spec-gate (round-orchestration.spec.ts, end-to-end advancePhase с реальной wiring)
 baseline_before: "Phase 6 заморожена PASS (34/34, commit 42a0c56): GsdEngine FSM работает со StubGating, 10 пакетов typecheck green, pipeline узлы (Context/RoleRouter/Consensus) изолированы"
 depends_on:

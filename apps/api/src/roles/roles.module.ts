@@ -6,6 +6,6 @@ import { RoleRouterService } from './role-router.service.js';
 @Module({
   imports: [ProvidersModule],
   providers: [ManifestLoaderAdapter, RoleRouterService],
-  exports: [RoleRouterService],
+  exports: [RoleRouterService, ManifestLoaderAdapter],
 })
 export class RolesModule {}

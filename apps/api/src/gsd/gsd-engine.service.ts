@@ -1,20 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import {
-  GsdEngine,
-  InMemorySessionStore,
-  StubGating,
-  InMemoryAuditLog,
-} from '@orchestra/gsd-engine';
-import type { AdvancePhaseResult } from '@orchestra/gsd-engine';
+import { GsdEngine, InMemorySessionStore, InMemoryAuditLog } from '@orchestra/gsd-engine';
+import type { AdvancePhaseResult, SessionStorePort } from '@orchestra/gsd-engine';
 import type { Session, Round, SessionId } from '@orchestra/domain';
+import { ContextService } from '../context/context.service.js';
+import { RoleRouterService } from '../roles/role-router.service.js';
+import { ConsensusService } from '../consensus/consensus.service.js';
+import { ManifestLoaderAdapter } from '../roles/manifest-loader.adapter.js';
+import { RoundOrchestratorGatingAdapter } from './round-orchestrator-gating.adapter.js';
 
 @Injectable()
 export class GsdEngineService {
-  private readonly engine = new GsdEngine({
-    store: new InMemorySessionStore(),
-    gating: new StubGating(),
-    audit: new InMemoryAuditLog(),
-  });
+  private readonly store: SessionStorePort = new InMemorySessionStore();
+  private readonly audit = new InMemoryAuditLog();
+  private readonly engine: GsdEngine;
+
+  constructor(
+    private readonly context: ContextService,
+    private readonly router: RoleRouterService,
+    private readonly consensus: ConsensusService,
+    private readonly roles: ManifestLoaderAdapter,
+  ) {
+    const gating = new RoundOrchestratorGatingAdapter(context, router, consensus, roles, this.store);
+    this.engine = new GsdEngine({ store: this.store, gating, audit: this.audit });
+  }
 
   async startSession(name: string, projectId: string): Promise<Session> {
     return this.engine.startSession({ name, projectId });
