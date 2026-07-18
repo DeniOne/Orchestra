@@ -1,7 +1,7 @@
 # README Contract — Phase 5 consensus-engine (Wave 5)
 
-**Verdict: PARTIAL (PASS — один честный долг D-E5: test-script, см. раздел «Долги»)**
-**Date:** 2026-07-18
+**Verdict: PASS (33/33) — после cleanup-волны 5b (D-E5 закрыт 2026-07-18)**
+**Date:** 2026-07-18 (Phase 5 заморожена PARTIAL), 2026-07-18 (волна 5b → PASS)
 **Milestone:** Orchestra MVP — Wave 5 (Consensus Layer)
 **Wave:** B-5
 **Code review:** @zcode-assistant (Tech Lead)
@@ -99,7 +99,7 @@ Consensus Engine — **не LLM, детерминированный модуль
 | **D-21** api package.json + consensus-engine dep | ✅ PASS | apps/api/package.json: `"@orchestra/consensus-engine": "workspace:*"` |
 | **D-22** порты-strатегии в types.ts | ✅ PASS | interfaces ClaimExtractionStrategy/ClusterStrategy/GatingPolicy. Реализации — конкретные классы |
 | **D-23** defaults работают без аргументов | ✅ PASS | constructor(options = {}) использует ClaimSyntaxStrategy/StructuralClusterStrategy/DefaultGatingPolicy по умолчанию (consensus-engine.ts:32-38) |
-| **D-24** pnpm test → all green | ❌ **FAIL** | `pnpm --filter @orchestra/consensus-engine test` (script=`node --import tsx --test`) возвращает `tests 0, pass 0`. Script не передаёт путь к spec, tsx+node:test не находит `.spec.ts` на Windows по умолчанию. См. долг D-E5 |
+| **D-24** pnpm test → all green | ✅ PASS | `pnpm --filter @orchestra/consensus-engine test` → `tests 6, pass 6, fail 0`, exit 0 (1469ms). **Закрыто в волне 5b** (commit см. ниже): test-script дополнен явным путём `test/consensus-engine.spec.ts`. До волны 5b был FAIL (tests 0) |
 | **D-25** T6 детерминизм (глубокое равенство) | ✅ PASS | 6/6 green через компилированный JS-прогон: T6 deepStrictEqual + JSON.stringify PASS |
 | **D-26** тесты без внешних ресурсов | ✅ PASS | Pure, нет сети/БД/ФС. Все 6 сценариев используют in-memory RoleResponse |
 | **D-27** pnpm -r typecheck 9 пакетов | ✅ PASS | Все 9: domain/knowledge-graph/context-service/prompt-registry/role-router/providers/consensus-engine/api/web — exit 0 |
@@ -190,24 +190,19 @@ Consensus Engine — **не LLM, детерминированный модуль
 
 ## Долги (правило PARTIAL-вердикта AGENTS.md)
 
-### D-E5 (новый, эта фаза) — Test-script `node --import tsx --test` не запускает spec
+### D-E5 (из Phase 5) — ✅ ЗАКРЫТ в волне 5b (2026-07-18)
 
-1. **Почему.** `packages/consensus-engine/package.json` script `"test": "node --import tsx --test"`
-   не передаёт путь к spec-файлу. На Windows + Node 22 + tsx 4.23, `node --test` без явного
-   пути не рекурсивно ищет `.spec.ts` в `test/` (ищет только `.test.js`/`.spec.js`, и tsx
-   loader не регистрирует `describe`/`it` корректно в этом сочетании). Результат: `pnpm test`
-   возвращает `# tests 0, # pass 0, # fail 0` — **ложно-зелёный** (0 fail, но и 0 run).
-   Сами тесты логически верны и проходят 6/6 при компиляции в JS и `node --test <path>`
-   (доказано Tech Lead в валидации: 6/6 PASS за 303ms, включая T6 детерминизм).
+**Корень:** `packages/consensus-engine/package.json` script `"test": "node --import tsx --test"`
+не передавал путь к spec. На Windows + Node 22 + tsx 4.23 `node --test` без явного пути не
+находил `.spec.ts` в `test/` → `tests 0, pass 0` (ложно-зелёный).
 
-2. **Когда.** Cleanup-волна **5-02** (mimo, 1 правка в package.json): изменить script на
-   `"test": "node --import tsx --test test/**/*.spec.ts"` ИЛИ переключиться на vitest (тяжелее,
-   +1 dep). Prefer первый вариант (1 строка). Не блокирует — фаза закрывается PARTIAL.
+**Fix (волна 5b, кодер mimo, 1 строка):** test-script дополнен явным путём:
+`"test": "node --import tsx --test test/consensus-engine.spec.ts"`. Разведка Tech Lead перед
+PLAN 5b прогнала 4 кандидата — только явный путь работает на Windows (glob `**` не раскрывается).
 
-3. **Блокирует Phase 6?** **НЕТ.** Pipeline исполняем и протестирован (6/6 через
-   компилированный прогон). Test-script — это DX/CI-удобство, не функциональность. Phase 6
-   (GSD Engine) будет вызывать `consensusEngine.run()` — ему нужен рабочий engine, а не
-   рабочий `pnpm test`. D-E5 закрывается попутно в первой cleanup-правке.
+**Verifier (objective, Tech Lead):** `pnpm --filter @orchestra/consensus-engine test` →
+`tests 6, pass 6, fail 0`, exit 0 (1469ms). D-24: FAIL → ✅ PASS. Phase 5: PARTIAL (32/33) →
+**PASS (33/33)**.
 
 ### Перенесённые долги (без изменений)
 
