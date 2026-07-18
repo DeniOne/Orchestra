@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum NodeType {
+  Goal
+  Requirement
+  Architecture
+  API
+  Module
+  Entity
+  Repository
+  Service
+  Risk
+  Test
+  ADR
+  Task
+  Research
+  Code
+  Documentation
+  Decision
+}
+
+enum RelationshipType {
+  depends_on
+  replaces
+  implements
+  validates
+  blocks
+  supersedes
+  conflicts_with
+  references
+}
+
+model KgNode {
+  id          String     @id @default(cuid())
+  type        NodeType
+  title       String
+  description String?
+  metadata    Json?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  outgoing    KgRelationship[] @relation("source")
+  incoming    KgRelationship[] @relation("target")
+
+  @@index([type])
+  @@index([createdAt])
+}
+
+model KgRelationship {
+  id          String           @id @default(cuid())
+  type        RelationshipType
+  sourceId    String
+  targetId    String
+  metadata    Json?
+  createdAt   DateTime         @default(now())
+
+  source      KgNode           @relation("source", fields: [sourceId], references: [id], onDelete: Cascade)
+  target      KgNode           @relation("target", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId])
+  @@index([targetId])
+  @@index([type])
+}
