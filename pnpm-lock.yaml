@@ -16,9 +16,15 @@ importers:
       '@nestjs/core':
         specifier: ^10
         version: 10.4.22(@nestjs/common@10.4.22(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@orchestra/context-service':
+        specifier: workspace:*
+        version: link:../../packages/context-service
       '@orchestra/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@orchestra/prompt-registry':
+        specifier: workspace:*
+        version: link:../../packages/prompt-registry
       '@prisma/client':
         specifier: ^6
         version: 6.19.3(prisma@6.19.3(typescript@5.6.3))(typescript@5.6.3)
@@ -73,6 +79,16 @@ importers:
         specifier: ~5.6
         version: 5.6.3
 
+  packages/context-service:
+    dependencies:
+      '@orchestra/domain':
+        specifier: workspace:*
+        version: link:../domain
+    devDependencies:
+      typescript:
+        specifier: ~5.6
+        version: 5.6.3
+
   packages/domain:
     devDependencies:
       typescript:
@@ -91,6 +107,15 @@ importers:
       prisma:
         specifier: ^6
         version: 6.19.3(typescript@5.6.3)
+      typescript:
+        specifier: ~5.6
+        version: 5.6.3
+
+  packages/prompt-registry:
+    devDependencies:
+      '@types/node':
+        specifier: ^22
+        version: 22.20.1
       typescript:
         specifier: ~5.6
         version: 5.6.3

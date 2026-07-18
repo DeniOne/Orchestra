@@ -4,6 +4,8 @@
   "type": "commonjs",
   "dependencies": {
     "@orchestra/domain": "workspace:*",
+    "@orchestra/context-service": "workspace:*",
+    "@orchestra/prompt-registry": "workspace:*",
     "@nestjs/common": "^10",
     "@nestjs/core": "^10",
     "@prisma/client": "^6",
