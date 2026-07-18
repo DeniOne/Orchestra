@@ -1,0 +1,11 @@
+id: researcher
+displayName: Researcher
+provider: gemini
+model: gemini-1.5-pro
+responsibilities: [research, alternatives, comparison, best-practices]
+allowedOutputs: [Research, Specification]
+contextPolicy_profile: researcher
+contextPolicy_maxTokens: 24000
+generation_temperature: 0.3
+generation_systemPromptRef: prompts/researcher.md
+activePhases: [Discover, Specification]

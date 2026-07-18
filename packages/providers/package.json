@@ -1,0 +1,26 @@
+{
+  "name": "@orchestra/providers",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@orchestra/domain": "workspace:*",
+    "js-tiktoken": "^1"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "typescript": "~5.6"
+  }
+}

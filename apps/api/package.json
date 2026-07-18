@@ -6,6 +6,8 @@
     "@orchestra/domain": "workspace:*",
     "@orchestra/context-service": "workspace:*",
     "@orchestra/prompt-registry": "workspace:*",
+    "@orchestra/role-router": "workspace:*",
+    "@orchestra/providers": "workspace:*",
     "@nestjs/common": "^10",
     "@nestjs/core": "^10",
     "@prisma/client": "^6",

@@ -1,0 +1,10 @@
+id: critic
+displayName: Critic / Red Team
+provider: openai
+model: gpt-4o
+responsibilities: [errors, threats, contradictions, principle-violations]
+allowedOutputs: [Review]
+contextPolicy_profile: critic
+contextPolicy_maxTokens: 24000
+generation_temperature: 0.1
+generation_systemPromptRef: prompts/critic.md

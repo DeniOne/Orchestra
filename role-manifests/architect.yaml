@@ -1,0 +1,11 @@
+id: architect
+displayName: Chief Architect
+provider: openai
+model: gpt-4o
+responsibilities: [architecture, strategy, decomposition]
+allowedOutputs: [ADR, Architecture, Review]
+contextPolicy_profile: architect
+contextPolicy_maxTokens: 32000
+generation_temperature: 0.2
+generation_systemPromptRef: prompts/architect.md
+activePhases: [Goal, Specification, Architecture, Review]
