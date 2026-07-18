@@ -8,6 +8,7 @@
     "@orchestra/prompt-registry": "workspace:*",
     "@orchestra/role-router": "workspace:*",
     "@orchestra/providers": "workspace:*",
+    "@orchestra/consensus-engine": "workspace:*",
     "@nestjs/common": "^10",
     "@nestjs/core": "^10",
     "@prisma/client": "^6",
