@@ -9,6 +9,7 @@
     "@orchestra/role-router": "workspace:*",
     "@orchestra/providers": "workspace:*",
     "@orchestra/consensus-engine": "workspace:*",
+    "@orchestra/gsd-engine": "workspace:*",
     "@nestjs/common": "^10",
     "@nestjs/core": "^10",
     "@prisma/client": "^6",

@@ -25,6 +25,9 @@ importers:
       '@orchestra/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@orchestra/gsd-engine':
+        specifier: workspace:*
+        version: link:../../packages/gsd-engine
       '@orchestra/prompt-registry':
         specifier: workspace:*
         version: link:../../packages/prompt-registry
@@ -116,6 +119,22 @@ importers:
 
   packages/domain:
     devDependencies:
+      typescript:
+        specifier: ~5.6
+        version: 5.6.3
+
+  packages/gsd-engine:
+    dependencies:
+      '@orchestra/domain':
+        specifier: workspace:*
+        version: link:../domain
+    devDependencies:
+      '@types/node':
+        specifier: ^22
+        version: 22.20.1
+      tsx:
+        specifier: ^4
+        version: 4.23.1
       typescript:
         specifier: ~5.6
         version: 5.6.3

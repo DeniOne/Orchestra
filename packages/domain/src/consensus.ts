@@ -21,6 +21,14 @@ export interface Conflict {
 
 export type GSDAction = string;
 
+import type { GSDPhase } from './gsd.js';
+
+/** Структурированное действие FSM (для GSD Engine). Phase 5 остаётся на string. */
+export type PhaseTransitionAction =
+  | { kind: 'transition'; from: GSDPhase; to: GSDPhase }
+  | { kind: 'iterate'; gaps: string[] }
+  | { kind: 'exit' };
+
 export type GatingVerdict = 'pass' | 'fail';
 
 /** См. docs/Consensus Protocol.md §5. */
