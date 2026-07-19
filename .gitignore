@@ -19,3 +19,6 @@ pnpm-debug.log*
 
 # IDE / agent artifacts
 .zcode/
+
+# runtime log artifacts (api_stdout.log, api_stderr.log и т.п.)
+*.log

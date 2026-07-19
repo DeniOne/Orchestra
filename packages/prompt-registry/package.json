@@ -9,11 +9,13 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js",
       "default": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc -p tsconfig.cjs.json && pnpm build:write-cjs-pkg",
+    "build:write-cjs-pkg": "node ../../packages/_shared/write-cjs-package-json.cjs",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
