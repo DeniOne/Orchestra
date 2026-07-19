@@ -1,10 +1,11 @@
-import type { GSDPhase } from '@orchestra/domain';
+import { SessionList } from '@/components/session-list';
+import { CreateSessionDialog } from '@/components/create-session-dialog';
 
 export default function Home() {
   return (
-    <main>
-      <h1>Orchestra</h1>
-      <p>Conducting Score UI — в разработке</p>
-    </main>
+    <>
+      <SessionList />
+      <CreateSessionDialog />
+    </>
   );
 }

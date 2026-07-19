@@ -13,6 +13,7 @@ export class GsdEngineService {
   private readonly store: SessionStorePort = new InMemorySessionStore();
   private readonly audit = new InMemoryAuditLog();
   private readonly engine: GsdEngine;
+  private readonly knownSessionIds = new Set<SessionId>();
 
   constructor(
     private readonly context: ContextService,
@@ -25,7 +26,9 @@ export class GsdEngineService {
   }
 
   async startSession(name: string, projectId: string): Promise<Session> {
-    return this.engine.startSession({ name, projectId });
+    const session = await this.engine.startSession({ name, projectId });
+    this.knownSessionIds.add(session.id);
+    return session;
   }
 
   async startRound(sessionId: SessionId): Promise<Round> {
@@ -50,5 +53,12 @@ export class GsdEngineService {
 
   async listRounds(sessionId: SessionId): Promise<Round[]> {
     return this.engine.listRounds(sessionId);
+  }
+
+  async listSessions(): Promise<Session[]> {
+    const sessions = await Promise.all(
+      [...this.knownSessionIds].map((id) => this.engine.getSession(id)),
+    );
+    return sessions.filter((s): s is Session => s !== null);
   }
 }

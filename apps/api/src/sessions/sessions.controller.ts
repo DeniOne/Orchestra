@@ -13,6 +13,11 @@ export class SessionsController {
     return this.gsd.startSession(dto.name, dto.projectId);
   }
 
+  @Get()
+  async listSessions() {
+    return this.gsd.listSessions();
+  }
+
   @Get(':id')
   async getSession(@Param('id') id: string) {
     const session = await this.gsd.getSession(id);
