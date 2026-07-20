@@ -1,0 +1,16 @@
+# Порт 6380 (внешний) → 6379 (внутренний контейнера).
+# Внешний 6380 используется вместо 6379, чтобы избежать конфликта с dmg-redis
+# (проект DMG) или любым другим локальным Redis на стандартном порту.
+# Приложение должно подключаться к REDIS_PORT=6380 (см. apps/api/.env.example).
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: orchestra-redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:

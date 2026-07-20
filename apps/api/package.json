@@ -14,8 +14,10 @@
     "@orchestra/providers": "workspace:*",
     "@orchestra/role-router": "workspace:*",
     "@prisma/client": "^6",
+    "bullmq": "^5.80.9",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "ioredis": "^5.11.1",
     "reflect-metadata": "^0.2",
     "rxjs": "^7"
   },

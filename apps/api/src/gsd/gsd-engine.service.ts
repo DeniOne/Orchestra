@@ -7,6 +7,7 @@ import { RoleRouterService } from '../roles/role-router.service.js';
 import { ConsensusService } from '../consensus/consensus.service.js';
 import { ManifestLoaderAdapter } from '../roles/manifest-loader.adapter.js';
 import { RoundOrchestratorGatingAdapter } from './round-orchestrator-gating.adapter.js';
+import { RedisEventPublisher } from '../event-bus/redis-event-publisher.js';
 
 @Injectable()
 export class GsdEngineService {
@@ -20,9 +21,15 @@ export class GsdEngineService {
     private readonly router: RoleRouterService,
     private readonly consensus: ConsensusService,
     private readonly roles: ManifestLoaderAdapter,
+    private readonly publisher: RedisEventPublisher,
   ) {
     const gating = new RoundOrchestratorGatingAdapter(context, router, consensus, roles, this.store);
-    this.engine = new GsdEngine({ store: this.store, gating, audit: this.audit });
+    this.engine = new GsdEngine({
+      store: this.store,
+      gating,
+      audit: this.audit,
+      events: this.publisher,
+    });
   }
 
   async startSession(name: string, projectId: string): Promise<Session> {
