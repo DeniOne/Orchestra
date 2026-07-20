@@ -1,6 +1,7 @@
 'use client';
 
 import { useSessions } from '@/hooks/use-sessions';
+import { useEventsSubscription } from '@/hooks/use-events-subscription';
 import { useUIStore } from '@/store/ui-store';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import type { Session } from '@orchestra/domain';
 
 export function SessionList() {
+  useEventsSubscription();
   const { data: sessions, isLoading, error, refetch, isFetching } = useSessions();
   const setCreateModalOpen = useUIStore((s) => s.setCreateModalOpen);
   const router = useRouter();

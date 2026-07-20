@@ -1,12 +1,14 @@
 'use client';
 
 import { useSession } from '@/hooks/use-session';
+import { useEventsSubscription } from '@/hooks/use-events-subscription';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PhaseBadge } from '@/components/phase-badge';
 import { RoundList } from '@/components/round-list';
 import { ConductControls } from '@/components/conduct-controls';
 
 export function SessionDetail({ id }: { id: string }) {
+  useEventsSubscription(id);
   const { data: session, isLoading, error } = useSession(id);
 
   if (isLoading) {

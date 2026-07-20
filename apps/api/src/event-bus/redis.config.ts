@@ -8,3 +8,7 @@ export const REDIS_CONNECTION = {
 };
 
 export const EVENT_QUEUE_NAME = 'orchestra.events';
+
+// Redis pub/sub channel для real-time fanout в EventsGateway.
+// Параллельно с BullMQ Queue (persist для audit) — pub/sub для low-latency push в WS.
+export const EVENT_PUBSUB_CHANNEL = 'orchestra.events.pubsub';
