@@ -5,8 +5,9 @@ import { RolesModule } from './roles/roles.module.js';
 import { ConsensusModule } from './consensus/consensus.module.js';
 import { GsdModule } from './gsd/gsd.module.js';
 import { SessionsModule } from './sessions/sessions.module.js';
+import { EventsModule } from './events/events.module.js';
 
 @Module({
-  imports: [KgModule, ContextModule, RolesModule, ConsensusModule, GsdModule, SessionsModule],
+  imports: [KgModule, ContextModule, RolesModule, ConsensusModule, GsdModule, SessionsModule, EventsModule],
 })
 export class AppModule {}
