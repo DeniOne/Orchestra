@@ -68,3 +68,16 @@ model KgRelationship {
   @@index([targetId])
   @@index([type])
 }
+
+model DomainEventRecord {
+  id         String   @id
+  type       String
+  sessionId  String
+  occurredAt DateTime
+  payload    Json
+  createdAt  DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([type])
+  @@index([occurredAt])
+}

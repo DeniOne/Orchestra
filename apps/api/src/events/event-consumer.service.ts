@@ -3,13 +3,17 @@ import { Worker, type Job } from 'bullmq';
 import type { DomainEvent } from '@orchestra/domain';
 import { REDIS_CONNECTION, EVENT_QUEUE_NAME } from '../event-bus/redis.config.js';
 import { EventBuffer } from './event-buffer.js';
+import { EventPersistenceService } from './event-persistence.service.js';
 
 @Injectable()
 export class EventConsumerService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(EventConsumerService.name);
   private worker?: Worker;
 
-  constructor(private readonly buffer: EventBuffer) {}
+  constructor(
+    private readonly buffer: EventBuffer,
+    private readonly persistence: EventPersistenceService,
+  ) {}
 
   onModuleInit() {
     this.worker = new Worker<DomainEvent>(
@@ -26,6 +30,7 @@ export class EventConsumerService implements OnModuleInit, OnModuleDestroy {
           }),
         );
         this.buffer.append(event);
+        await this.persistence.persist(event);
       },
       {
         connection: REDIS_CONNECTION,

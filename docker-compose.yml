@@ -12,5 +12,21 @@ services:
       - redis-data:/data
     restart: unless-stopped
 
+  # Порт 5433 (внешний) → 5432 (внутренний). Избегает конфликта с dmg-postgres
+  # (проект DMG) на стандартном 5432. DATABASE_URL должна использовать порт 5433.
+  postgres:
+    image: postgres:16-alpine
+    container_name: orchestra-postgres
+    environment:
+      POSTGRES_USER: orchestra
+      POSTGRES_PASSWORD: orchestra
+      POSTGRES_DB: orchestra
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
 volumes:
   redis-data:
+  postgres-data:
