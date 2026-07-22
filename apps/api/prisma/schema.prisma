@@ -81,3 +81,17 @@ model DomainEventRecord {
   @@index([type])
   @@index([occurredAt])
 }
+
+model SessionRecord {
+  id           String   @id
+  name         String
+  projectId    String
+  currentPhase String
+  rounds       Json
+  createdAt    DateTime
+  updatedAt    DateTime
+
+  @@index([projectId])
+  @@index([currentPhase])
+  @@index([updatedAt])
+}

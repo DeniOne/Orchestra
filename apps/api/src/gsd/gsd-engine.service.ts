@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GsdEngine, InMemorySessionStore, InMemoryAuditLog } from '@orchestra/gsd-engine';
+import { GsdEngine, InMemoryAuditLog } from '@orchestra/gsd-engine';
 import type { AdvancePhaseResult, SessionStorePort } from '@orchestra/gsd-engine';
 import type { Session, Round, SessionId } from '@orchestra/domain';
 import { ContextService } from '../context/context.service.js';
@@ -8,13 +8,12 @@ import { ConsensusService } from '../consensus/consensus.service.js';
 import { ManifestLoaderAdapter } from '../roles/manifest-loader.adapter.js';
 import { RoundOrchestratorGatingAdapter } from './round-orchestrator-gating.adapter.js';
 import { RedisEventPublisher } from '../event-bus/redis-event-publisher.js';
+import { PrismaSessionStore } from './prisma-session-store.js';
 
 @Injectable()
 export class GsdEngineService {
-  private readonly store: SessionStorePort = new InMemorySessionStore();
   private readonly audit = new InMemoryAuditLog();
   private readonly engine: GsdEngine;
-  private readonly knownSessionIds = new Set<SessionId>();
 
   constructor(
     private readonly context: ContextService,
@@ -22,6 +21,7 @@ export class GsdEngineService {
     private readonly consensus: ConsensusService,
     private readonly roles: ManifestLoaderAdapter,
     private readonly publisher: RedisEventPublisher,
+    private readonly store: PrismaSessionStore,
   ) {
     const gating = new RoundOrchestratorGatingAdapter(context, router, consensus, roles, this.store);
     this.engine = new GsdEngine({
@@ -33,9 +33,7 @@ export class GsdEngineService {
   }
 
   async startSession(name: string, projectId: string): Promise<Session> {
-    const session = await this.engine.startSession({ name, projectId });
-    this.knownSessionIds.add(session.id);
-    return session;
+    return this.engine.startSession({ name, projectId });
   }
 
   async startRound(sessionId: SessionId): Promise<Round> {
@@ -63,9 +61,6 @@ export class GsdEngineService {
   }
 
   async listSessions(): Promise<Session[]> {
-    const sessions = await Promise.all(
-      [...this.knownSessionIds].map((id) => this.engine.getSession(id)),
-    );
-    return sessions.filter((s): s is Session => s !== null);
+    return this.store.list();
   }
 }

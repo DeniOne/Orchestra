@@ -4,6 +4,8 @@ import { ContextModule } from '../context/context.module.js';
 import { RolesModule } from '../roles/roles.module.js';
 import { ConsensusModule } from '../consensus/consensus.module.js';
 import { EventBusModule } from '../event-bus/event-bus.module.js';
+import { PrismaService } from '../prisma.service.js';
+import { PrismaSessionStore } from './prisma-session-store.js';
 import { GsdEngineService } from './gsd-engine.service.js';
 import { ObjectiveSeedService } from './objective-seed.service.js';
 
@@ -16,7 +18,7 @@ import { ObjectiveSeedService } from './objective-seed.service.js';
   // SessionStorePort (interface, type-only) на index [4], который emitDecoratorMetadata
   // стирает до Object → DI не может зарезолвить. Phase 8.03 — официальное санкционирование
   // этого удаления (Phase 8.02 сделал его без документации, что было anti-conflict нарушением).
-  providers: [GsdEngineService, ObjectiveSeedService],
+  providers: [PrismaService, PrismaSessionStore, GsdEngineService, ObjectiveSeedService],
   exports: [GsdEngineService],
 })
 export class GsdModule {}
