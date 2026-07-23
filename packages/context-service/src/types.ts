@@ -26,6 +26,8 @@ export interface BuildPacketRequest {
   objective: string;
   objectiveNodeId?: string;
   phase: GSDPhase;
+  /** Целевая модель из манифеста (manifest.model). Если не задана — fallback на resolveModelTarget. */
+  model?: string;
 }
 
 /** Источник данных графа — абстракция (hexagonal port). */

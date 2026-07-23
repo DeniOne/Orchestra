@@ -1,7 +1,7 @@
 id: critic
 displayName: Critic / Red Team
 provider: openai
-model: gpt-4o
+model: anthropic/claude-sonnet-4.5
 responsibilities: [errors, threats, contradictions, principle-violations]
 allowedOutputs: [Review]
 contextPolicy_profile: critic

@@ -1,7 +1,7 @@
 id: tech_lead
 displayName: Tech Lead
-provider: glm
-model: glm-4-plus
+provider: openai
+model: anthropic/claude-sonnet-4.5
 responsibilities: [implementation, performance, infrastructure, api, database, devops]
 allowedOutputs: [Architecture, Specification, Code]
 contextPolicy_profile: tech_lead

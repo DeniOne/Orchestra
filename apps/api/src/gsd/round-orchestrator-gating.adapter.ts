@@ -38,6 +38,7 @@ export class RoundOrchestratorGatingAdapter implements GatingPort {
         objective: session.name,
         objectiveNodeId: 'stub-objective',
         phase,
+        model: manifest.model,
       });
       const { response } = await this.router.route({ packet });
       const roleRef: RoleRef = {

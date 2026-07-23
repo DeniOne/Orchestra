@@ -20,7 +20,7 @@ export class OpenAIAdapter extends AIProviderBase {
     this.pending.set(requestId, controller);
 
     const body = {
-      model: this.cfg.defaultModel,
+      model: packet.modelTarget ?? this.cfg.defaultModel,
       temperature: 0.2,
       messages: [
         { role: 'system', content: packet.systemPrompt },

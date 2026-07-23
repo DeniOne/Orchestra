@@ -36,7 +36,7 @@ export async function buildPacket(
   const prompt = await prompts.getPrompt(req.roleId);
 
   const builtAt: ISO8601 = new Date().toISOString();
-  const modelTarget = resolveModelTarget(req.roleId);
+  const modelTarget = req.model ?? resolveModelTarget(req.roleId);
 
   const packet: ContextPacket = {
     sessionId: req.sessionId,

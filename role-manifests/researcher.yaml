@@ -1,7 +1,7 @@
 id: researcher
 displayName: Researcher
-provider: gemini
-model: gemini-1.5-pro
+provider: openai
+model: google/gemini-2.5-flash
 responsibilities: [research, alternatives, comparison, best-practices]
 allowedOutputs: [Research, Specification]
 contextPolicy_profile: researcher

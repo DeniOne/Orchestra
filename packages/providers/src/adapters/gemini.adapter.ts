@@ -27,7 +27,7 @@ export class GeminiAdapter extends AIProviderBase {
     };
 
     const res = await this.http.post(
-      `${this.cfg.baseUrl}/models/${this.cfg.defaultModel}:generateContent?key=${this.cfg.apiKey}`,
+      `${this.cfg.baseUrl}/models/${packet.modelTarget ?? this.cfg.defaultModel}:generateContent?key=${this.cfg.apiKey}`,
       { 'Content-Type': 'application/json' },
       body,
     );

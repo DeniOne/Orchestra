@@ -1,7 +1,7 @@
 id: architect
 displayName: Chief Architect
 provider: openai
-model: gpt-4o
+model: anthropic/claude-sonnet-4.5
 responsibilities: [architecture, strategy, decomposition]
 allowedOutputs: [ADR, Architecture, Review]
 contextPolicy_profile: architect
