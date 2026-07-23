@@ -3,7 +3,7 @@ import type {
   GSDPhase, PhaseChanged, RoundStarted, OwnerOverrideApplied,
 } from '@orchestra/domain';
 import type {
-  SessionStorePort, GatingPort, AuditPort, EventPublisherPort, GsdEngineOptions,
+  SessionStorePort, GatingPort, AuditPort, EventPublisherPort, GsdEngineOptions, GatingResult,
 } from './types.js';
 import { InMemorySessionStore } from './in-memory-store.js';
 import { StubGating } from './stub-gating.js';
@@ -96,6 +96,7 @@ export class GsdEngine {
     if (phase === 'Consensus') {
       const result = await this.gating.evaluate(sessionId, phase);
       if (result.verdict === 'fail') {
+        this.persistRoundArtifacts(session, phase, result);
         session.currentPhase = 'Iteration';
         session.updatedAt = new Date().toISOString();
         await this.store.update(session);
@@ -136,6 +137,7 @@ export class GsdEngine {
     }
 
     const from = phase;
+    this.persistRoundArtifacts(session, phase, result);
     session.currentPhase = target;
     session.updatedAt = new Date().toISOString();
     this.approvals.delete(this.approvalKey(sessionId, from));
@@ -153,6 +155,21 @@ export class GsdEngine {
     await this.events.publish(event);
 
     return { status: 'transitioned', from, to: target, event };
+  }
+
+  /**
+   * Persist per-role responses + consensus report на round для audit trail (D-9-6).
+   * Mutates session.rounds (canonical object) before store.update. No-op if gating result
+   * lacks artifacts (e.g. fail before consensus) или round не найден.
+   */
+  private persistRoundArtifacts(session: Session, phase: GSDPhase, result: GatingResult): void {
+    if (!result.responses && !result.consensus) return;
+    const round = session.rounds.find((r) => r.phase === phase && r.status !== 'completed');
+    if (!round) return;
+    if (result.responses) round.responses = result.responses;
+    if (result.consensus) round.consensus = result.consensus;
+    round.status = 'completed';
+    round.completedAt = new Date().toISOString();
   }
 
   async approveTransition(sessionId: SessionId): Promise<Session> {

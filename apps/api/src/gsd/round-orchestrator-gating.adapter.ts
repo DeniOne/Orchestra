@@ -55,10 +55,15 @@ export class RoundOrchestratorGatingAdapter implements GatingPort {
       responses: roleResponses,
     });
 
+    // Pass responses + consensus up via GatingResult — engine owns the canonical session
+    // object and does the single store.update (avoids split-brain between adapter's and
+    // engine's separate store.get reads). Persist layer в GsdEngine.advancePhase (D-9-6).
     return {
       verdict: report.gatingVerdict,
       gaps: extractGaps(report),
       phase,
+      responses: roleResponses.map((rr) => ({ role: rr.role, response: rr.response })),
+      consensus: report,
     };
   }
 

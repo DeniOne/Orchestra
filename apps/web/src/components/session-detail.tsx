@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PhaseBadge } from '@/components/phase-badge';
 import { RoundList } from '@/components/round-list';
 import { ConductControls } from '@/components/conduct-controls';
+import { ConfidenceGauges } from '@/components/confidence-gauges';
 
 export function SessionDetail({ id }: { id: string }) {
   useEventsSubscription(id);
@@ -19,6 +20,11 @@ export function SessionDetail({ id }: { id: string }) {
     return <p className="text-destructive">Сессия не найдена</p>;
   }
 
+  // Последний completed round с consensus — gauges в шапку (UI Canon layout: confidence сверху).
+  const lastRoundWithConsensus = [...session.rounds]
+    .reverse()
+    .find((r) => r.consensus);
+
   return (
     <div className="space-y-6">
       <Card>
@@ -28,16 +34,26 @@ export function SessionDetail({ id }: { id: string }) {
             <PhaseBadge phase={session.currentPhase} />
           </div>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <p className="text-sm text-muted-foreground">
-            Проект: {session.projectId}
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Создано: {new Date(session.createdAt).toLocaleString('ru-RU')}
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Обновлено: {new Date(session.updatedAt).toLocaleString('ru-RU')}
-          </p>
+        <CardContent className="space-y-3">
+          <div className="space-y-1">
+            <p className="text-sm text-muted-foreground">
+              Проект: {session.projectId}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Создано: {new Date(session.createdAt).toLocaleString('ru-RU')}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Обновлено: {new Date(session.updatedAt).toLocaleString('ru-RU')}
+            </p>
+          </div>
+
+          {/* Confidence gauges в шапке — UI Canon §2 (latest round with consensus) */}
+          {lastRoundWithConsensus?.consensus && (
+            <ConfidenceGauges
+              confidence={lastRoundWithConsensus.consensus.confidence}
+              phase={lastRoundWithConsensus.phase}
+            />
+          )}
         </CardContent>
       </Card>
 

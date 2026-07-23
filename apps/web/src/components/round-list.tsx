@@ -2,6 +2,9 @@ import type { Round } from '@orchestra/domain';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PhaseBadge } from '@/components/phase-badge';
+import { ConfidenceGauges } from '@/components/confidence-gauges';
+import { ScoreStaves } from '@/components/score-staves';
+import { ConsensusPanel } from '@/components/consensus-panel';
 
 const statusLabels: Record<string, string> = {
   pending: 'Ожидание',
@@ -25,7 +28,7 @@ export function RoundList({ rounds }: { rounds: Round[] }) {
   const sorted = [...rounds].reverse();
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <h3 className="text-sm font-medium text-muted-foreground">Раунды</h3>
       {sorted.map((round) => (
         <Card key={round.id}>
@@ -40,10 +43,26 @@ export function RoundList({ rounds }: { rounds: Round[] }) {
               </div>
             </div>
           </CardHeader>
-          <CardContent className="py-2 px-4">
+          <CardContent className="space-y-3 py-2 px-4">
             <p className="text-xs text-muted-foreground">
               Начат: {new Date(round.startedAt).toLocaleString('ru-RU')}
+              {round.completedAt && (
+                <> · Завершён: {new Date(round.completedAt).toLocaleString('ru-RU')}</>
+              )}
             </p>
+
+            {/* Conducting Score — Confidence gauges (UI Canon §2) */}
+            {round.consensus && (
+              <ConfidenceGauges confidence={round.consensus.confidence} phase={round.phase} />
+            )}
+
+            {/* Conducting Score — Role staves with real LLM content (UI Canon §1) */}
+            {round.responses && round.responses.length > 0 && (
+              <ScoreStaves responses={round.responses} />
+            )}
+
+            {/* Continuous Consensus panel (UI Canon §3) */}
+            {round.consensus && <ConsensusPanel consensus={round.consensus} />}
           </CardContent>
         </Card>
       ))}

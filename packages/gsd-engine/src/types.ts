@@ -1,6 +1,6 @@
 import type {
-  Session, SessionId, Round, RoundId,
-  GSDPhase, GatingVerdict, DomainEvent,
+  Session, SessionId, Round, RoundId, RoundResponse,
+  GSDPhase, GatingVerdict, DomainEvent, ConsensusReport,
 } from '@orchestra/domain';
 
 export interface SessionStorePort {
@@ -14,6 +14,9 @@ export interface GatingResult {
   verdict: GatingVerdict;
   gaps: string[];
   phase: GSDPhase;
+  /** Per-role responses + consensus report для persist на round (D-9-6). Optional — может отсутствовать. */
+  responses?: RoundResponse[];
+  consensus?: ConsensusReport;
 }
 
 export interface GatingPort {
