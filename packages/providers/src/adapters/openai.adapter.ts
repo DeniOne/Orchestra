@@ -4,11 +4,11 @@ import type { HttpPort, ProviderConfig } from '../types.js';
 import crypto from 'node:crypto';
 
 export class OpenAIAdapter extends AIProviderBase {
-  constructor(http: HttpPort, apiKey: string) {
+  constructor(http: HttpPort, apiKey: string, baseUrl?: string) {
     super(http, {
       id: 'openai',
       apiKey,
-      baseUrl: 'https://api.openai.com/v1',
+      baseUrl: baseUrl ?? 'https://api.openai.com/v1',
       defaultModel: 'gpt-4o',
       prices: { inputPer1K: 0.0025, outputPer1K: 0.01 },
     });

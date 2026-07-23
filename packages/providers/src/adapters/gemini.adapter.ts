@@ -4,11 +4,11 @@ import type { HttpPort, ProviderConfig } from '../types.js';
 import crypto from 'node:crypto';
 
 export class GeminiAdapter extends AIProviderBase {
-  constructor(http: HttpPort, apiKey: string) {
+  constructor(http: HttpPort, apiKey: string, baseUrl?: string) {
     super(http, {
       id: 'gemini',
       apiKey,
-      baseUrl: 'https://generativelanguage.googleapis.com/v1beta',
+      baseUrl: baseUrl ?? 'https://generativelanguage.googleapis.com/v1beta',
       defaultModel: 'gemini-1.5-pro',
       prices: { inputPer1K: 0.00125, outputPer1K: 0.005 },
     });

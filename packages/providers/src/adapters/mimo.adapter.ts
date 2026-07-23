@@ -4,11 +4,11 @@ import type { HttpPort, ProviderConfig } from '../types.js';
 import crypto from 'node:crypto';
 
 export class MiMoAdapter extends AIProviderBase {
-  constructor(http: HttpPort, apiKey: string) {
+  constructor(http: HttpPort, apiKey: string, baseUrl?: string) {
     super(http, {
       id: 'mimo',
       apiKey,
-      baseUrl: 'https://api.mimo.ai/v1',
+      baseUrl: baseUrl ?? 'https://api.mimo.ai/v1',
       defaultModel: 'mimo-7b',
       prices: { inputPer1K: 0.001, outputPer1K: 0.003 },
     });

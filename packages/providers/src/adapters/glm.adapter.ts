@@ -4,11 +4,11 @@ import type { HttpPort, ProviderConfig } from '../types.js';
 import crypto from 'node:crypto';
 
 export class GLMAdapter extends AIProviderBase {
-  constructor(http: HttpPort, apiKey: string) {
+  constructor(http: HttpPort, apiKey: string, baseUrl?: string) {
     super(http, {
       id: 'glm',
       apiKey,
-      baseUrl: 'https://open.bigmodel.cn/api/paas/v4',
+      baseUrl: baseUrl ?? 'https://open.bigmodel.cn/api/paas/v4',
       defaultModel: 'glm-4-plus',
       prices: { inputPer1K: 0.001, outputPer1K: 0.005 },
     });
